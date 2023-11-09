@@ -1,5 +1,5 @@
 /** CONFIG **/
-var SIGNALING_SERVER = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : '8080'}`;
+var SIGNALING_SERVER = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
 var ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }];
 var signaling_socket = null;
 var local_media_stream = null;

@@ -7,22 +7,22 @@ const PORT = 8080;
 /*************/
 /*** SETUP ***/
 /*************/
-// const fs = require("fs");
+const fs = require("fs");
 const express = require('express');
 //var http = require('http');
-// const https = require("https");
+const https = require("https");
 const bodyParser = require('body-parser')
-const server = express()
-server.use(express.static(__dirname));
+const main = express()
+main.use(express.static(__dirname));
 //const server = http.createServer(main)
 
 
-// let privateKey, certificate;
+let privateKey, certificate;
 
-// privateKey = fs.readFileSync("ssl/server-key.pem", "utf8");
-// certificate = fs.readFileSync("ssl/server-cert.pem", "utf8");
-// const credentials = { key: privateKey, cert: certificate };
-// const server = https.createServer(credentials, main);
+privateKey = fs.readFileSync("ssl/server-key.pem", "utf8");
+certificate = fs.readFileSync("ssl/server-cert.pem", "utf8");
+const credentials = { key: privateKey, cert: certificate };
+const server = https.createServer(credentials, main);
 
 const io = require('socket.io').listen(server);
 //io.set('log level', 2);
@@ -58,7 +58,7 @@ io.sockets.on('connection', function (socket) {
     socket.channels = {};
     sockets[socket.id] = socket;
 
-    console.log("[" + socket.id + "] connection accepted", socket.);
+    console.log("[" + socket.id + "] connection accepted");
     socket.on('disconnect', function () {
         for (var channel in socket.channels) {
             part(channel);
@@ -122,7 +122,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('relaySessionDescription', function (config) {
         var peer_id = config.peer_id;
         var session_description = config.session_description;
-        // console.log("[" + socket.id + "] relaying session description to [" + peer_id + "] ", session_description);
+        console.log("[" + socket.id + "] relaying session description to [" + peer_id + "] ", session_description);
 
         if (peer_id in sockets) {
             sockets[peer_id].emit('sessionDescription', { 'peer_id': socket.id, 'session_description': session_description });
